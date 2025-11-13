@@ -1,0 +1,33 @@
+---
+
+- name: Hostname change on Managed Nodes
+  hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: Change the hostname on the Managed Nodes
+      debug:
+        msg: "OS Detected: {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+
+    - name: Set hostname fro RHEL9
+      hostname:
+        name: "Managed-Node-RHEL9"
+      when: 
+        - ansible_distribution == "Redhat"
+        - ansible_distribution_major_version == "9"
+
+    - name: Set hostname for Rocky9
+      hostname:
+        name: "Managed-Node-ROCKY9"
+      when:
+        - ansible_distribution == "Rocky"
+        - ansible_distribution_major_version == "9"
+
+    - name: Run command to show the hostname
+      command: hostnamectl
+      register: hostname_output
+
+    - name: Print Hostname
+      debug:
+        msg: "{{ hostname_output.stdout }}"
+      

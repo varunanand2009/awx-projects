@@ -1,0 +1,29 @@
+---
+- name: Create a local User and add into sudoers
+  hosts: all
+  become: yes
+  become_user: root
+
+  vars:
+    devops_password: "{{ 'linux@123' | password_hash('sha512') }}"
+
+  tasks:
+    - name: Create a user named devops
+      user:
+        name: devops
+        password: "{{ devops_password }}"
+        shell: /bin/bash
+        create_home: yes
+
+    - name: Allow devops to run commands with sudo privilege (NOPASSWD)
+      copy:
+        dest: /etc/sudoers.d/devops
+        content: "devops ALL=(ALL) NOPASSWD: ALL\n"
+        owner: root
+        group: root
+        mode: '0440'
+
+    - name: Ensure correct sudoers file permissions
+      file:
+        path: /etc/sudoers.d/devops
+        mode: '0440'
