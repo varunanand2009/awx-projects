@@ -1,0 +1,19 @@
+---
+- name: Patching of the Hosts
+  hosts: web
+  become: yes
+  become_user: root
+  tsks:
+
+    - name: Patch the servers according to the OS and use the relevent modules
+      yum:
+        latest: yes
+    
+    - name: reboot the server but when the patching finishes
+      reboot: yes
+
+    - name: Print the uname -r and the uptime on the scree
+      shell: |
+
+        ansible web -m shell -a "uptime;uname -r"
+...

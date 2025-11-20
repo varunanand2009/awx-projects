@@ -10,20 +10,20 @@
   tasks:
     - name: Create a user named devops
       user:
-        name: devops
+        name: veeru
         password: "{{ devops_password }}"
         shell: /bin/bash
         create_home: yes
 
     - name: Allow devops to run commands with sudo privilege (NOPASSWD)
       copy:
-        dest: /etc/sudoers.d/devops
-        content: "devops ALL=(ALL) NOPASSWD: ALL\n"
+        dest: /etc/sudoers.d/veeru
+        content: "veeru ALL=(ALL) NOPASSWD: ALL\n"
         owner: root
         group: root
         mode: '0440'
 
     - name: Ensure correct sudoers file permissions
       file:
-        path: /etc/sudoers.d/devops
+        path: /etc/sudoers.d/veeru
         mode: '0440'
